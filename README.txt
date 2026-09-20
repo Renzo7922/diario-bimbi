@@ -1,19 +1,11 @@
-DIARIO BIMBI - PWA v0.2
+DIARIO BIMBI - PWA v0.3
 
-Questa è una web app installabile su iPhone.
-Funzioni:
-- profili bambini
-- eventi sanitari
-- sintomi, temperatura, farmaci e dose inserita
-- storico
-- promemoria farmaci
-- promemoria visite
-- pulsante "Fatto" per registrare l'avvenuta somministrazione/attività
-- agenda
-- dati salvati localmente nel browser
+Novità:
+- modifica ed eliminazione di visite/promemoria
+- modifica ed eliminazione di eventi sanitari
+- modifica di data, ora, titolo, dose e note
+- aggiornamento del service worker
 
-IMPORTANTE:
-Questa demo non invia ancora notifiche push native affidabili e non sincronizza i dati tra dispositivi. Per una versione reale serviranno backend, autenticazione, sincronizzazione, sicurezza e una progettazione specifica per dati sanitari di minori.
+Per aggiornare GitHub Pages, sostituire i file del repository con quelli di questa versione e attendere la nuova pubblicazione.
 
-INSTALLAZIONE:
-La cartella deve essere pubblicata su un indirizzo HTTPS. Poi su iPhone aprire l'indirizzo con Safari e scegliere Condividi -> Aggiungi alla schermata Home.
+Usare solo dati di prova finché non saranno implementati autenticazione, sincronizzazione e misure di sicurezza adeguate.

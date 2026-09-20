@@ -1,96 +1,36 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#5b67f1">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.svg">
-<title>Diario Bimbi</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5b4bdb"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.json"><title>Diario Bimbi</title>
 <style>
-:root{--blue:#5b67f1;--bg:#f6f7fb;--card:#fff;--text:#20232a;--muted:#737986;--border:#e7e8ee}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif;color:var(--text)}
-header{padding:calc(env(safe-area-inset-top) + 18px) 18px 16px;background:var(--blue);color:white;position:sticky;top:0;z-index:5}
-header h1{margin:0;font-size:28px} header p{margin:4px 0 0;opacity:.85}
-main{padding:16px 16px calc(95px + env(safe-area-inset-bottom));max-width:720px;margin:auto}
-.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 12px #00000008}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.child{display:flex;align-items:center;gap:12px}
-.avatar{width:48px;height:48px;border-radius:50%;background:#eef0ff;display:grid;place-items:center;font-size:23px}
-h2,h3,p{margin-top:0}.muted{color:var(--muted)}button{border:0;border-radius:12px;padding:12px 15px;font-weight:600;font-size:15px;background:var(--blue);color:white}
-button.secondary{background:#eef0ff;color:#3e49b8}button.ghost{background:#f0f1f5;color:#40444e}
-button.danger{background:#fff0f0;color:#b83232}.actions{display:flex;gap:8px;flex-wrap:wrap}
-input,textarea,select{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;font:inherit;background:white}textarea{min-height:80px;resize:vertical}
-label{display:block;font-size:13px;font-weight:600;margin:12px 0 6px}.section-title{font-size:14px;font-weight:700;color:var(--muted);margin:20px 2px 8px}
-.event{border-left:4px solid var(--blue);padding-left:12px}.pill{display:inline-block;background:#eef0ff;color:#404bb4;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:700}
-nav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(14px);border-top:1px solid var(--border);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:10}
-nav button{background:transparent;color:#686d78;padding:8px 12px;font-size:12px}nav button.active{color:var(--blue)}
-.hidden{display:none}.empty{text-align:center;padding:28px 10px}.small{font-size:13px}
-dialog{border:0;border-radius:20px;width:min(92%,520px);padding:0;box-shadow:0 20px 70px #0004}dialog::backdrop{background:#0006}.modal{padding:20px}.modal h2{margin:0 0 10px}.close{float:right;background:#eee;color:#333;padding:7px 10px}
-</style>
-</head>
-<body>
-<header><h1>Diario Bimbi</h1><p>Salute, farmaci e visite in un unico posto</p></header>
-<main id="app"></main>
-<nav>
-<button id="navHome" onclick="showHome()">🏠<br>Home</button>
-<button id="navAgenda" onclick="showAgenda()">📅<br>Agenda</button>
-<button onclick="newChild()">＋<br>Bambino</button>
-</nav>
-
-<dialog id="modal"><div class="modal"><button class="close" onclick="closeModal()">✕</button><div id="modalContent"></div></div></dialog>
-
+:root{--p:#5b4bdb;--bg:#f6f7fb;--card:#fff;--text:#202124;--muted:#68707d;--danger:#c62828;--border:#e2e5ec}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}header{background:var(--p);color:#fff;padding:22px 18px 18px;position:sticky;top:0;z-index:3}header h1{margin:0;font-size:25px}header small{opacity:.9}.wrap{max-width:760px;margin:auto;padding:14px}.nav{display:flex;gap:8px;overflow:auto;padding:8px 0 12px}.nav button{white-space:nowrap}.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #00000008}h2,h3{margin:5px 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.grid{grid-template-columns:1fr}}label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}input,textarea,select{width:100%;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}textarea{min-height:80px}button{border:0;border-radius:10px;padding:10px 13px;background:var(--p);color:#fff;font-weight:600}button.secondary{background:#eef0f6;color:#30343b}button.danger{background:#fff0f0;color:var(--danger)}button.link{background:none;color:var(--p);padding:5px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.muted{color:var(--muted)}.pill{display:inline-block;background:#eeeafe;color:#4c3fc0;padding:4px 8px;border-radius:999px;font-size:12px}.item-title{font-weight:700;font-size:17px}.empty{text-align:center;padding:28px;color:var(--muted)}.hidden{display:none}.top-actions{display:flex;justify-content:space-between;align-items:center;gap:10px}.mini{font-size:13px}.section{margin-top:18px}.danger-text{color:var(--danger)}
+</style></head>
+<body><header><div class="wrap"><h1>👶 Diario Bimbi</h1><small>Diario sanitario familiare · v0.3</small></div></header>
+<main class="wrap"><div class="nav"><button onclick="show('home')">🏠 Home</button><button onclick="show('children')">👶 Bambini</button><button onclick="show('history')">📋 Storico</button><button onclick="show('agenda')">⏰ Agenda</button></div><div id="app"></div></main>
 <script>
-const KEY="diariobimbi.pwa.v1";
-let db=JSON.parse(localStorage.getItem(KEY)||'{"children":[],"events":[],"reminders":[]}');
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
-const esc=s=>String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-const fmt=d=>new Date(d).toLocaleString('it-IT',{dateStyle:'medium',timeStyle:'short'});
-const fmtDate=d=>new Date(d).toLocaleDateString('it-IT',{dateStyle:'medium'});
-function openModal(html){modalContent.innerHTML=html;modal.showModal()} function closeModal(){modal.close()}
-function showHome(){
- navHome.classList.add('active');navAgenda.classList.remove('active');
- let html='';
- if(!db.children.length) html+=`<div class="card empty"><div style="font-size:48px">👶</div><h2>Inizia il diario</h2><p class="muted">Crea il profilo del tuo primo bambino.</p><button onclick="newChild()">＋ Aggiungi bambino</button></div>`;
- db.children.forEach(c=>{
-  let ev=db.events.filter(e=>e.childId===c.id).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,3);
-  let rem=db.reminders.filter(r=>r.childId===c.id&&!r.done).sort((a,b)=>new Date(a.when)-new Date(b.when)).slice(0,2);
-  html+=`<div class="card"><div class="row"><div class="child"><div class="avatar">👶</div><div><h2 style="margin:0">${esc(c.name)}</h2><span class="muted">${fmtDate(c.birthDate)}</span></div></div><button class="secondary" onclick="childView('${c.id}')">Apri</button></div>`;
-  if(rem.length){html+=`<div class="section-title">Prossimi promemoria</div>`;rem.forEach(r=>html+=reminderMini(r,c))} 
-  if(ev.length){html+=`<div class="section-title">Ultimi eventi</div>`;ev.forEach(e=>html+=eventMini(e))}
-  if(!ev.length&&!rem.length) html+=`<p class="muted small" style="margin-top:15px">Nessun dato registrato.</p>`;
-  html+=`</div>`;
- });
- app.innerHTML=html;
-}
-function eventMini(e){return `<div class="event card" style="box-shadow:none"><div class="row"><b>${esc(e.title||'Evento')}</b><span class="pill">${fmtDate(e.date)}</span></div>${e.symptoms?`<p class="small">🤒 ${esc(e.symptoms)}</p>`:''}${e.medicine?`<p class="small">💊 ${esc(e.medicine)}${e.dose?' — '+esc(e.dose):''}</p>`:''}${e.notes?`<p class="small muted">${esc(e.notes)}</p>`:''}</div>`}
-function reminderMini(r,c){return `<div class="card" style="box-shadow:none;background:#fafaff"><div class="row"><div><b>${r.type==='medicine'?'💊':'🩺'} ${esc(r.title)}</b><div class="small muted">${fmt(r.when)}${r.dose?' · Dose: '+esc(r.dose):''}</div></div><button class="ghost" onclick="completeReminder('${r.id}')">✓ Fatto</button></div></div>`}
-function newChild(){
- openModal(`<h2>Nuovo bambino</h2><label>Nome</label><input id="cn" placeholder="Es. Matteo"><label>Data di nascita</label><input id="cd" type="date"><div class="actions" style="margin-top:18px"><button onclick="addChild()">Salva</button></div>`);
-}
-function addChild(){let name=cn.value.trim();if(!name)return;db.children.push({id:crypto.randomUUID(),name,birthDate:cd.value||new Date().toISOString()});save();closeModal();showHome()}
-function childView(id){
-let c=db.children.find(x=>x.id===id);let ev=db.events.filter(e=>e.childId===id).sort((a,b)=>new Date(b.date)-new Date(a.date));
-let rem=db.reminders.filter(r=>r.childId===id&&!r.done).sort((a,b)=>new Date(a.when)-new Date(b.when));
-app.innerHTML=`<div class="card"><div class="row"><div><h2>${esc(c.name)}</h2><p class="muted">Nato il ${fmtDate(c.birthDate)}</p></div></div><div class="actions"><button onclick="newEvent('${id}')">＋ Evento</button><button class="secondary" onclick="newReminder('${id}')">⏰ Promemoria</button></div></div>
-<div class="section-title">Promemoria</div>${rem.length?rem.map(r=>reminderMini(r,c)).join(''):`<div class="card"><span class="muted">Nessun promemoria.</span></div>`}
-<div class="section-title">Storico</div>${ev.length?ev.map(eventMini).join(''):`<div class="card"><span class="muted">Nessun evento registrato.</span></div>`}
-<div class="actions" style="margin-top:15px"><button class="ghost" onclick="showHome()">← Torna ai bambini</button></div>`;
-}
-function newEvent(id){
-openModal(`<h2>Nuovo evento</h2><label>Motivo / malattia</label><input id="et" placeholder="Es. Febbre e raffreddore"><label>Data e ora</label><input id="ed" type="datetime-local" value="${new Date().toISOString().slice(0,16)}"><label>Sintomi</label><textarea id="es"></textarea><label>Temperatura °C</label><input id="etemp" inputmode="decimal"><label>Farmaco</label><input id="em" placeholder="Nome del farmaco"><label>Dose registrata</label><input id="edose" placeholder="Come prescritta"><label>Note</label><textarea id="en"></textarea><p class="small muted">Il dosaggio viene registrato esattamente come inserito. L'app non calcola dosi mediche.</p><button onclick="addEvent('${id}')">Salva evento</button>`);
-}
-function addEvent(id){db.events.push({id:crypto.randomUUID(),childId:id,date:ed.value||new Date().toISOString(),title:et.value,symptoms:es.value,temperature:etemp.value,medicine:em.value,dose:edose.value,notes:en.value});save();closeModal();childView(id)}
-function newReminder(id){
-openModal(`<h2>Nuovo promemoria</h2><label>Tipo</label><select id="rt"><option value="medicine">💊 Farmaco</option><option value="visit">🩺 Visita</option></select><label>Titolo</label><input id="rtitle" placeholder="Es. Paracetamolo / Pediatra"><label>Data e ora</label><input id="rw" type="datetime-local" value="${new Date(Date.now()+3600000).toISOString().slice(0,16)}"><label>Dose (solo per farmaci)</label><input id="rdose" placeholder="Come prescritta"><label>Note</label><textarea id="rnote"></textarea><button onclick="addReminder('${id}')">Imposta promemoria</button>`);
-}
-function addReminder(id){db.reminders.push({id:crypto.randomUUID(),childId:id,type:rt.value,title:rtitle.value,when:rw.value,dose:rdose.value,note:rnote.value,done:false});save();closeModal();childView(id)}
-function completeReminder(id){let r=db.reminders.find(x=>x.id===id);if(r){r.done=true;r.completedAt=new Date().toISOString();save();showAgenda()}}
-function showAgenda(){
-navHome.classList.remove('active');navAgenda.classList.add('active');
-let list=db.reminders.filter(r=>!r.done).sort((a,b)=>new Date(a.when)-new Date(b.when));
-app.innerHTML=`<div class="card"><h2>Agenda</h2><p class="muted">Promemoria di farmaci e visite.</p></div>${list.length?list.map(r=>{let c=db.children.find(x=>x.id===r.childId);return `<div class="card"><div class="row"><div><span class="pill">${r.type==='medicine'?'FARMACO':'VISITA'}</span><h3 style="margin:8px 0 4px">${esc(r.title)}</h3><div class="small">${c?esc(c.name):''} · ${fmt(r.when)}</div>${r.dose?`<div class="small">Dose: ${esc(r.dose)}</div>`:''}</div><button class="ghost" onclick="completeReminder('${r.id}')">✓ Fatto</button></div></div>`}).join(''):`<div class="card empty"><div style="font-size:42px">📅</div><h3>Agenda vuota</h3><p class="muted">Aggiungi un promemoria dalla scheda del bambino.</p></div>`}
-`}
-showHome();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-</script>
-</body></html>
+const KEY='diariobimbi.pwa.v1'; let db=JSON.parse(localStorage.getItem(KEY)||'{"children":[],"events":[],"reminders":[]}');
+const save=()=>localStorage.setItem(KEY,JSON.stringify(db)); const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7); const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>d?new Date(d).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'';
+function childOptions(selected=''){return '<option value="">Seleziona bambino</option>'+db.children.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')}
+function show(page='home'){window.scrollTo(0,0); const a=document.getElementById('app'); if(page==='children') return childrenPage(a); if(page==='history') return historyPage(a); if(page==='agenda') return agendaPage(a); homePage(a)}
+function homePage(a){a.innerHTML=`<div class="card"><div class="top-actions"><div><h2>Benvenuto</h2><div class="muted">Gestisci in modo ordinato il diario dei bambini.</div></div><span class="pill">Demo</span></div></div><div class="grid"><div class="card"><h3>👶 Bambini</h3><b>${db.children.length}</b><div class="muted mini">profili</div><button style="margin-top:10px" onclick="show('children')">Apri</button></div><div class="card"><h3>📋 Eventi</h3><b>${db.events.length}</b><div class="muted mini">registrati</div><button style="margin-top:10px" onclick="show('history')">Apri</button></div></div><div class="card"><h3>➕ Nuovo</h3><div class="row"><button onclick="newEvent()">Diario sanitario</button><button onclick="newReminder()">Promemoria</button></div></div>`}
+function childrenPage(a){a.innerHTML=`<div class="top-actions"><h2>👶 Profili bambini</h2><button onclick="newChild()">+ Bambino</button></div>${db.children.length?db.children.map(c=>`<div class="card"><div class="item-title">${esc(c.name)}</div><div class="muted">Nato/a: ${esc(c.birthDate||'—')}</div><div class="row" style="margin-top:10px"><button class="secondary" onclick="editChild('${c.id}')">✏️ Modifica</button><button class="danger" onclick="deleteChild('${c.id}')">🗑️ Elimina</button></div></div>`).join(''):'<div class="empty">Nessun bambino inserito.</div>'}`}
+function newChild(editId=''){const c=db.children.find(x=>x.id===editId)||{}; const name=prompt('Nome del bambino:',c.name||''); if(name===null)return; if(!name.trim())return alert('Inserisci un nome.'); const birth=prompt('Data di nascita (es. 12/03/2023):',c.birthDate||''); if(editId){c.name=name.trim();c.birthDate=birth||''}else db.children.push({id:uid(),name:name.trim(),birthDate:birth||''});save();show('children')}
+const editChild=id=>newChild(id); function deleteChild(id){if(!confirm('Eliminare il profilo e i dati collegati?'))return;db.children=db.children.filter(c=>c.id!==id);db.events=db.events.filter(e=>e.childId!==id);db.reminders=db.reminders.filter(r=>r.childId!==id);save();show('children')}
+function eventForm(e={}){document.getElementById('app').innerHTML=`<div class="card"><h2>${e.id?'✏️ Modifica evento':'➕ Nuovo evento sanitario'}</h2><label>Bambino</label><select id="fchild">${childOptions(e.childId||'')}</select><label>Data e ora</label><input id="fdate" type="datetime-local" value="${e.date?new Date(e.date).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}"><label>Titolo / motivo</label><input id="ftitle" value="${esc(e.title||'')}"><label>Sintomi</label><textarea id="fsym">${esc(e.symptoms||'')}</textarea><div class="grid"><div><label>Temperatura</label><input id="ftemp" value="${esc(e.temperature||'')}" placeholder="es. 38,5 °C"></div><div><label>Farmaco</label><input id="fmed" value="${esc(e.medicine||'')}"></div></div><label>Dose inserita</label><input id="fdose" value="${esc(e.dose||'')}"><label>Note</label><textarea id="fnote">${esc(e.notes||'')}</textarea><div class="row" style="margin-top:12px"><button onclick="saveEventForm('${e.id||''}')">Salva</button><button class="secondary" onclick="show('history')">Annulla</button></div></div>`}
+function newEvent(){if(!db.children.length)return alert('Prima crea almeno un profilo bambino.');eventForm()}
+function saveEventForm(id){const childId=fchild.value;if(!childId)return alert('Seleziona il bambino.');const data={childId,date:new Date(fdate.value).toISOString(),title:ftitle.value.trim()||'Evento sanitario',symptoms:fsym.value.trim(),temperature:ftemp.value.trim(),medicine:fmed.value.trim(),dose:fdose.value.trim(),notes:fnote.value.trim()};if(id){Object.assign(db.events.find(e=>e.id===id),data)}else db.events.push({id:uid(),...data});save();show('history')}
+function editEvent(id){eventForm(db.events.find(e=>e.id===id)||{})} function deleteEvent(id){if(!confirm('Eliminare questo evento?'))return;db.events=db.events.filter(e=>e.id!==id);save();show('history')}
+function eventMini(e){const c=db.children.find(x=>x.id===e.childId);return `<div class="card"><div class="item-title">${esc(e.title)}</div><div class="muted">${esc(c?.name||'')} · ${fmt(e.date)}</div>${e.symptoms?`<div><b>Sintomi:</b> ${esc(e.symptoms)}</div>`:''}${e.temperature?`<div><b>Temperatura:</b> ${esc(e.temperature)}</div>`:''}${e.medicine?`<div><b>Farmaco:</b> ${esc(e.medicine)} ${esc(e.dose)}</div>`:''}${e.notes?`<div><b>Note:</b> ${esc(e.notes)}</div>`:''}<div class="row" style="margin-top:10px"><button class="secondary" onclick="editEvent('${e.id}')">✏️ Modifica</button><button class="danger" onclick="deleteEvent('${e.id}')">🗑️ Elimina</button></div></div>`}
+function historyPage(a){a.innerHTML=`<div class="top-actions"><h2>📋 Storico completo</h2><button onclick="newEvent()">+ Evento</button></div><div class="card"><label>Cerca</label><input id="search" placeholder="sintomo, farmaco, note..." oninput="renderHistory()"><label>Filtra bambino</label><select id="filter" onchange="renderHistory()">${childOptions()}</select></div><div id="hist"></div>`;renderHistory()}
+function renderHistory(){const q=(document.getElementById('search')?.value||'').toLowerCase(),f=document.getElementById('filter')?.value||'';let es=db.events.filter(e=>(!f||e.childId===f)&&JSON.stringify(e).toLowerCase().includes(q)).sort((a,b)=>new Date(b.date)-new Date(a.date));document.getElementById('hist').innerHTML=es.length?es.map(eventMini).join(''):'<div class="empty">Nessun evento trovato.</div>'}
+function reminderForm(r={}){document.getElementById('app').innerHTML=`<div class="card"><h2>${r.id?'✏️ Modifica promemoria':'➕ Nuovo promemoria'}</h2><label>Bambino</label><select id="rchild">${childOptions(r.childId||'')}</select><label>Tipo</label><select id="rtype"><option value="farmaco" ${r.type==='farmaco'?'selected':''}>💊 Farmaco</option><option value="visita" ${r.type==='visita'?'selected':''}>🩺 Visita</option></select><label>Titolo</label><input id="rtitle" value="${esc(r.title||'')}"><label>Data e ora</label><input id="rwhen" type="datetime-local" value="${r.when?new Date(r.when).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}"><label>Dose (se già prescritta)</label><input id="rdose" value="${esc(r.dose||'')}"><label>Note</label><textarea id="rnote">${esc(r.note||'')}</textarea><div class="row" style="margin-top:12px"><button onclick="saveReminderForm('${r.id||''}')">Salva</button><button class="secondary" onclick="show('agenda')">Annulla</button></div></div>`}
+function newReminder(){if(!db.children.length)return alert('Prima crea almeno un profilo bambino.');reminderForm()}
+function saveReminderForm(id){if(!rchild.value)return alert('Seleziona il bambino.');const data={childId:rchild.value,type:rtype.value,title:rtitle.value.trim()||'Promemoria',when:new Date(rwhen.value).toISOString(),dose:rdose.value.trim(),note:rnote.value.trim(),done:false};if(id){const old=db.reminders.find(r=>r.id===id);Object.assign(old,data,{done:old.done,completedAt:old.completedAt})}else db.reminders.push({id:uid(),...data});save();show('agenda')}
+function editReminder(id){reminderForm(db.reminders.find(r=>r.id===id)||{})} function deleteReminder(id){if(!confirm('Eliminare questo promemoria?'))return;db.reminders=db.reminders.filter(r=>r.id!==id);save();show('agenda')} function completeReminder(id){const r=db.reminders.find(x=>x.id===id);r.done=!r.done;r.completedAt=r.done?new Date().toISOString():null;save();show('agenda')}
+function reminderMini(r){const c=db.children.find(x=>x.id===r.childId);return `<div class="card"><div class="item-title">${r.type==='farmaco'?'💊':'🩺'} ${esc(r.title)}</div><div class="muted">${esc(c?.name||'')} · ${fmt(r.when)}</div>${r.dose?`<div><b>Dose:</b> ${esc(r.dose)}</div>`:''}${r.note?`<div><b>Note:</b> ${esc(r.note)}</div>`:''}<div class="row" style="margin-top:10px"><button onclick="completeReminder('${r.id}')">${r.done?'↩️ Da fare':'✅ Fatto'}</button><button class="secondary" onclick="editReminder('${r.id}')">✏️ Modifica</button><button class="danger" onclick="deleteReminder('${r.id}')">🗑️ Elimina</button></div></div>`}
+function agendaPage(a){let rs=[...db.reminders].sort((a,b)=>new Date(a.when)-new Date(b.when));a.innerHTML=`<div class="top-actions"><h2>⏰ Agenda</h2><button onclick="newReminder()">+ Promemoria</button></div>${rs.length?rs.map(reminderMini).join(''):'<div class="empty">Nessun promemoria o visita.</div>'}`}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{}); show('home');
+</script></body></html>

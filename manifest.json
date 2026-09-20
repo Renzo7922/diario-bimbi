@@ -1,9 +1,1 @@
-{
-  "name": "Diario Bimbi",
-  "short_name": "Diario Bimbi",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f6f7fb",
-  "theme_color": "#5b67f1",
-  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
-}
+{"name":"Diario Bimbi","short_name":"Diario Bimbi","start_url":"./","display":"standalone","background_color":"#f6f7fb","theme_color":"#5b67f1","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}

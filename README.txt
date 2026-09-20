@@ -1,11 +1,21 @@
-DIARIO BIMBI - PWA v0.3
+BIMBÙ – PWA v0.6
 
-Novità:
-- modifica ed eliminazione di visite/promemoria
-- modifica ed eliminazione di eventi sanitari
-- modifica di data, ora, titolo, dose e note
-- aggiornamento del service worker
+Contenuto:
+- index.html: app principale
+- manifest.json: configurazione PWA
+- sw.js: service worker
+- icon.svg: icona app
 
-Per aggiornare GitHub Pages, sostituire i file del repository con quelli di questa versione e attendere la nuova pubblicazione.
+Novità v0.6:
+- report per la pediatra
+- selezione bambino e periodo
+- stampa / Salva come PDF dal browser
+- modifica ed eliminazione di eventi e promemoria
+- calendario, storico e agenda
 
-Usare solo dati di prova finché non saranno implementati autenticazione, sincronizzazione e misure di sicurezza adeguate.
+Per GitHub Pages:
+1. Sostituire i file del repository con questi file.
+2. Lasciare index.html nella cartella principale.
+3. Attendere la pubblicazione di GitHub Pages.
+
+Nota: usare solo dati di test finché autenticazione, sincronizzazione e misure di sicurezza non saranno implementate.

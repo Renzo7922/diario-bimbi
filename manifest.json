@@ -1,1 +1,10 @@
-{"name":"Diario Bimbi","short_name":"Diario Bimbi","start_url":"./","display":"standalone","background_color":"#f6f7fb","theme_color":"#5b67f1","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
+{
+  "name": "Bimbù – Diario della crescita e della salute",
+  "short_name": "Bimbù",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7f8f4",
+  "theme_color": "#5c7a65",
+  "lang": "it",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -5,92 +5,177 @@
 <meta name="theme-color" content="#5b4bdb"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="./manifest.json"><title>Bimbù</title>
 <style>
-:root{--p:#5c7a65;--p2:#eaf2e7;--bg:#f7f8f4;--card:#fff;--text:#29332c;--muted:#707870;--danger:#b24c3b;--border:#e1e6df}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}header{background:linear-gradient(145deg,#5c7a65,#7d9b78);color:#fff;padding:22px 18px 20px;position:sticky;top:0;z-index:3}header h1{margin:0;font-size:25px}header small{opacity:.9}.wrap{max-width:760px;margin:auto;padding:14px}.nav{display:flex;gap:8px;overflow:auto;padding:8px 0 12px}.nav button{white-space:nowrap}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin:10px 0;box-shadow:0 5px 18px #20352d0d}h2,h3{margin:5px 0 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.grid{grid-template-columns:1fr}}label{display:block;font-size:13px;color:var(--muted);margin:8px 0 4px}input,textarea,select{width:100%;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}textarea{min-height:80px}button{border:0;border-radius:12px;padding:10px 13px;background:var(--p);color:#fff;font-weight:600}button.secondary{background:#eef0f6;color:#30343b}button.danger{background:#fff0f0;color:var(--danger)}button.link{background:none;color:var(--p);padding:5px}.row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.muted{color:var(--muted)}.pill{display:inline-block;background:#eeeafe;color:#4c3fc0;padding:4px 8px;border-radius:999px;font-size:12px}.item-title{font-weight:700;font-size:17px}.empty{text-align:center;padding:28px;color:var(--muted)}.hidden{display:none}.top-actions{display:flex;justify-content:space-between;align-items:center;gap:10px}.mini{font-size:13px}.section{margin-top:18px}.danger-text{color:var(--danger)}
+:root{--p:#5c7a65;--p2:#eaf2e7;--bg:#f7f8f4;--card:#fff;--text:#29332c;--muted:#707870;--danger:#b24c3b;--border:#dfe6df}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:var(--p);color:white;padding:28px 20px}header h1{margin:0;font-size:34px}header small{font-size:16px;opacity:.9}
+.wrap{max-width:1000px;margin:auto}.nav{display:flex;gap:10px;flex-wrap:wrap;padding:16px 0}.nav button,button{border:0;border-radius:18px;padding:13px 18px;background:var(--p);color:white;font-size:16px;font-weight:600;cursor:pointer}
+button.secondary{background:#edf0f5;color:#39404a}.danger{background:#fff0ee;color:var(--danger)}
+main.wrap{padding:0 16px 40px}.card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:22px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+label{display:block;color:var(--muted);margin:12px 0 6px;font-size:15px}input,select,textarea{width:100%;border:1px solid var(--border);border-radius:16px;padding:14px;font-size:16px;background:white}textarea{min-height:90px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.row{display:flex;gap:10px;flex-wrap:wrap}.top-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h2{font-size:28px;margin:12px 0}.muted{color:var(--muted)}.event{border:1px solid var(--border);border-radius:22px;padding:18px;margin:14px 0;background:white}.event h3{margin:0 0 4px;font-size:21px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.pill{display:inline-block;background:var(--p2);color:var(--p);padding:6px 10px;border-radius:12px;font-size:13px;font-weight:600}
+.day{border:1px solid var(--border);border-radius:16px;padding:12px;background:white;cursor:pointer}.day.has{background:var(--p2);border-color:#b9ceb9}.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.weekday{text-align:center;color:var(--muted);font-size:12px}
+table{width:100%;border-collapse:collapse;margin-top:14px}th,td{padding:9px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;font-size:14px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.nav button{flex:1 1 auto}.calgrid{gap:4px}.day{padding:8px;font-size:13px}}
 </style></head>
-<body><header><div class="wrap"><h1>👶 Bimbù</h1><small>Diario del bambino familiare · v0.3</small></div></header>
-<main class="wrap"><div class="nav"><button onclick="show('home')">🏠 Home</button><button onclick="show('children')">👶 Bambini</button><button onclick="show('calendar')">📅 Calendario</button><button onclick="show('history')">📋 Storico</button><button onclick="show('agenda')">⏰ Agenda</button></div><div id="app"></div></main>
-<script>
-const KEY='bimbu.pwa.v1'; let db=JSON.parse(localStorage.getItem(KEY)||'{"children":[],"events":[],"reminders":[]}');
-const save=()=>localStorage.setItem(KEY,JSON.stringify(db)); const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7); const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=d=>d?new Date(d).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'';
-function childOptions(selected=''){return '<option value="">Seleziona bambino</option>'+db.children.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')}
-function show(page='home'){window.scrollTo(0,0); const a=document.getElementById('app'); if(page==='children') return childrenPage(a); if(page==='calendar') return calendarPage(a); if(page==='history') return historyPage(a); if(page==='agenda') return agendaPage(a); homePage(a)}
-function homePage(a){a.innerHTML=`<div class="card"><div class="top-actions"><div><h2>Benvenuto</h2><div class="muted">Gestisci in modo ordinato il diario dei bambini.</div></div><span class="pill">Demo</span></div></div><div class="grid"><div class="card"><h3>👶 Bambini</h3><b>${db.children.length}</b><div class="muted mini">profili</div><button style="margin-top:10px" onclick="show('children')">Apri</button></div><div class="card"><h3>📋 Eventi</h3><b>${db.events.length}</b><div class="muted mini">registrati</div><button style="margin-top:10px" onclick="show('history')">Apri</button></div></div><div class="card"><h3>➕ Nuovo</h3><div class="row"><button onclick="newEvent()">Diario del bambino</button><button onclick="newReminder()">Promemoria</button></div></div>`}
-function childrenPage(a){a.innerHTML=`<div class="top-actions"><h2>👶 Profili bambini</h2><button onclick="newChild()">+ Bambino</button></div>${db.children.length?db.children.map(c=>`<div class="card"><div class="item-title">${esc(c.name)}</div><div class="muted">Nato/a: ${esc(c.birthDate||'—')}</div><div class="row" style="margin-top:10px"><button class="secondary" onclick="editChild('${c.id}')">✏️ Modifica</button><button class="danger" onclick="deleteChild('${c.id}')">🗑️ Elimina</button></div></div>`).join(''):'<div class="empty">Nessun bambino inserito.</div>'}`}
-function newChild(editId=''){const c=db.children.find(x=>x.id===editId)||{}; const name=prompt('Nome del bambino:',c.name||''); if(name===null)return; if(!name.trim())return alert('Inserisci un nome.'); const birth=prompt('Data di nascita (es. 12/03/2023):',c.birthDate||''); if(editId){c.name=name.trim();c.birthDate=birth||''}else db.children.push({id:uid(),name:name.trim(),birthDate:birth||''});save();show('children')}
-const editChild=id=>newChild(id); function deleteChild(id){if(!confirm('Eliminare il profilo e i dati collegati?'))return;db.children=db.children.filter(c=>c.id!==id);db.events=db.events.filter(e=>e.childId!==id);db.reminders=db.reminders.filter(r=>r.childId!==id);save();show('children')}
-function eventForm(e={}){document.getElementById('app').innerHTML=`<div class="card"><h2>${e.id?'✏️ Modifica evento':'➕ Nuovo episodio'}</h2><label>Bambino</label><select id="fchild">${childOptions(e.childId||'')}</select><label>Data e ora</label><input id="fdate" type="datetime-local" value="${e.date?new Date(e.date).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}"><label>Titolo dell'episodio</label><input id="ftitle" value="${esc(e.title||'')}"><label>Sintomi</label><textarea id="fsym">${esc(e.symptoms||'')}</textarea><div class="grid"><div><label>Temperatura</label><input id="ftemp" value="${esc(e.temperature||'')}" placeholder="es. 38,5 °C"></div><div><label>Farmaco registrato</label><input id="fmed" value="${esc(e.medicine||'')}"></div></div><label>Dose registrata</label><input id="fdose" value="${esc(e.dose||'')}"><label>Note</label><textarea id="fnote">${esc(e.notes||'')}</textarea><div class="row" style="margin-top:12px"><button onclick="saveEventForm('${e.id||''}')">Salva</button><button class="secondary" onclick="show('history')">Annulla</button></div></div>`}
-function newEvent(){if(!db.children.length)return alert('Prima crea almeno un profilo bambino.');eventForm()}
-function saveEventForm(id){const childId=fchild.value;if(!childId)return alert('Seleziona il bambino.');const data={childId,date:new Date(fdate.value).toISOString(),title:ftitle.value.trim()||'Evento sanitario',symptoms:fsym.value.trim(),temperature:ftemp.value.trim(),medicine:fmed.value.trim(),dose:fdose.value.trim(),notes:fnote.value.trim()};if(id){Object.assign(db.events.find(e=>e.id===id),data)}else db.events.push({id:uid(),...data});save();show('history')}
-function editEvent(id){eventForm(db.events.find(e=>e.id===id)||{})} function deleteEvent(id){if(!confirm('Eliminare questo evento?'))return;db.events=db.events.filter(e=>e.id!==id);save();show('history')}
-function eventMini(e){const c=db.children.find(x=>x.id===e.childId);return `<div class="card"><div class="item-title">${esc(e.title)}</div><div class="muted">${esc(c?.name||'')} · ${fmt(e.date)}</div>${e.symptoms?`<div><b>Sintomi:</b> ${esc(e.symptoms)}</div>`:''}${e.temperature?`<div><b>Temperatura:</b> ${esc(e.temperature)}</div>`:''}${e.medicine?`<div><b>Farmaco registrato:</b> ${esc(e.medicine)} ${esc(e.dose)}</div>`:''}${e.notes?`<div><b>Note:</b> ${esc(e.notes)}</div>`:''}<div class="row" style="margin-top:10px"><button class="secondary" onclick="editEvent('${e.id}')">✏️ Modifica</button><button class="danger" onclick="deleteEvent('${e.id}')">🗑️ Elimina</button></div></div>`}
+<body>
+<header><div class="wrap"><h1>👶 Bimbù</h1><small>Diario del bambino familiare · v0.6</small></div></header>
+<main class="wrap"><div class="nav">
+<button onclick="show('home')">🏠 Home</button>
+<button onclick="show('children')">👶 Bambini</button>
+<button onclick="show('calendar')">📅 Calendario</button>
+<button onclick="show('history')">📋 Storico</button>
+<button onclick="show('agenda')">⏰ Agenda</button>
+<button onclick="show('report')">🩺 Report pediatra</button>
+</div><div id="app"></div></main>
 
-function doctorSummary(){
- if(!db.events.length)return alert('Non ci sono ancora eventi da riassumere.');
- const es=[...db.events].sort((a,b)=>new Date(a.date)-new Date(b.date));
- const rows=es.map(e=>`• ${childName(e.childId)} — ${new Date(e.date).toLocaleDateString('it-IT')}: ${e.title}${e.temperature?' · '+e.temperature:''}${e.medicine?' · '+e.medicine+' '+e.dose:''}`).join('\n');
- alert("RIEPILOGO BIMBÙ\n\n"+rows+"\n\nIl riepilogo contiene esclusivamente i dati inseriti nell'app.");
+<script>
+const KEY='bimbu.pwa.v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"children":[],"events":[],"reminders":[]}');
+const save=()=>localStorage.setItem(KEY,JSON.stringify(db));
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const fmt=d=>d?new Date(d).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'}):'';
+function childOptions(selected=''){
+return '<option value="">Seleziona bambino</option>'+db.children.map(c=>`<option value="${c.id}" ${c.id===selected?'selected':''}>${esc(c.name)}</option>`).join('')
+}
+
+function show(page='home'){
+window.scrollTo(0,0);
+const a=document.getElementById('app');
+if(page==='children')return childrenPage(a);
+if(page==='calendar')return calendarPage(a);
+if(page==='history')return historyPage(a);
+if(page==='agenda')return agendaPage(a);
+if(page==='report')return reportPage();
+homePage(a)
+}
+
+function homePage(a){
+a.innerHTML=`<div class="card"><h2>👋 Benvenuto in Bimbù</h2>
+<p class="muted">Il diario familiare per tenere ordinati episodi, sintomi, temperature, farmaci e appuntamenti.</p>
+<div class="row"><button onclick="newEvent()">🌡️ Nuovo episodio</button><button onclick="newReminder()">💊 Nuovo promemoria</button><button class="secondary" onclick="show('report')">🩺 Report pediatra</button></div></div>
+<div class="card"><h2>👶 Bambini</h2>${db.children.length?db.children.map(c=>`<div class="event"><h3>${esc(c.name)}</h3><div class="muted">${esc(c.birthDate||'')}</div></div>`).join(''):'<p class="muted">Nessun bambino inserito.</p>'}</div>`
+}
+
+function childrenPage(a){
+a.innerHTML=`<div class="top-actions"><h2>👶 Bambini</h2><button onclick="newChild()">+ Bambino</button></div>
+${db.children.map(c=>`<div class="card"><h2>${esc(c.name)}</h2><p class="muted">Data di nascita: ${esc(c.birthDate||'—')}</p><div class="actions"><button onclick="editChild('${c.id}')">✏️ Modifica</button><button class="danger" onclick="deleteChild('${c.id}')">🗑️ Elimina</button></div></div>`).join('')||'<div class="card"><p class="muted">Aggiungi il primo bambino.</p></div>'}`
+}
+
+function newChild(editId=''){
+const c=db.children.find(x=>x.id===editId)||{};
+const name=prompt('Nome del bambino',c.name||'');
+if(!name)return;
+const birthDate=prompt('Data di nascita (GG/MM/AAAA)',c.birthDate||'')||'';
+if(editId){c.name=name;c.birthDate=birthDate}else db.children.push({id:crypto.randomUUID(),name,birthDate});
+save();show('children')
+}
+const editChild=id=>newChild(id);
+function deleteChild(id){
+if(!confirm('Eliminare il bambino e i dati associati?'))return;
+db.children=db.children.filter(c=>c.id!==id);db.events=db.events.filter(e=>e.childId!==id);db.reminders=db.reminders.filter(r=>r.childId!==id);save();show('children')
+}
+
+function eventForm(e={}){
+const editing=!!e.id;
+document.getElementById('app').innerHTML=`<div class="card"><h2>${editing?'✏️ Modifica episodio':'🌡️ Nuovo episodio'}</h2>
+<label>Bambino</label><select id="evChild">${childOptions(e.childId)}</select>
+<label>Data e ora</label><input id="evDate" type="datetime-local" value="${e.date||new Date().toISOString().slice(0,16)}">
+<label>Titolo</label><input id="evTitle" value="${esc(e.title||'')}">
+<label>Sintomi</label><textarea id="evSymptoms">${esc(e.symptoms||'')}</textarea>
+<label>Temperatura</label><input id="evTemp" value="${esc(e.temperature||'')}" placeholder="es. 38,5">
+<label>Farmaco registrato</label><input id="evMed" value="${esc(e.medicine||'')}">
+<label>Dose</label><input id="evDose" value="${esc(e.dose||'')}">
+<label>Note</label><textarea id="evNotes">${esc(e.notes||'')}</textarea>
+<div class="actions"><button onclick="saveEventForm('${e.id||''}')">💾 Salva</button><button class="secondary" onclick="show('history')">Annulla</button></div></div>`
+}
+
+function newEvent(){if(!db.children.length)return alert('Prima aggiungi un bambino.');eventForm()}
+function saveEventForm(id){
+const x={id:id||crypto.randomUUID(),childId:document.getElementById('evChild').value,date:document.getElementById('evDate').value,title:document.getElementById('evTitle').value,symptoms:document.getElementById('evSymptoms').value,temperature:document.getElementById('evTemp').value,medicine:document.getElementById('evMed').value,dose:document.getElementById('evDose').value,notes:document.getElementById('evNotes').value};
+if(!x.childId||!x.title)return alert('Inserisci almeno bambino e titolo.');
+const i=db.events.findIndex(e=>e.id===id);if(i>=0)db.events[i]=x;else db.events.push(x);save();show('history')
+}
+function editEvent(id){const e=db.events.find(x=>x.id===id);if(e)eventForm(e)}
+function deleteEvent(id){if(confirm('Eliminare questo episodio?')){db.events=db.events.filter(e=>e.id!==id);save();show('history')}}
+
+function eventMini(e){
+const c=db.children.find(x=>x.id===e.childId);
+return `<div class="event"><h3>${esc(e.title)}</h3><div class="muted">${esc(c?.name||'')} · ${fmt(e.date)}</div>
+${e.symptoms?`<div><b>Sintomi:</b> ${esc(e.symptoms)}</div>`:''}
+${e.temperature?`<div><b>Temperatura:</b> ${esc(e.temperature)}</div>`:''}
+${e.medicine?`<div><b>Farmaco registrato:</b> ${esc(e.medicine)}</div>`:''}
+${e.dose?`<div><b>Dose:</b> ${esc(e.dose)}</div>`:''}
+${e.notes?`<div><b>Note:</b> ${esc(e.notes)}</div>`:''}
+<div class="actions"><button class="secondary" onclick="editEvent('${e.id}')">✏️ Modifica</button><button class="danger" onclick="deleteEvent('${e.id}')">🗑️ Elimina</button></div></div>`
+}
+
+function historyPage(a){
+a.innerHTML=`<div class="top-actions"><h2>📋 Storico completo</h2><div class="row"><button onclick="show('report')">🩺 Report pediatra</button><button onclick="newEvent()">+ Evento</button></div></div>
+<div class="card"><label>Cerca</label><input id="search" placeholder="sintomo, farmaco, note..." oninput="renderHistory()"><label>Filtra bambino</label><select id="filter" onchange="renderHistory()">${childOptions()}</select></div><div id="historyList"></div>`;
+renderHistory()
+}
+function renderHistory(){
+const q=(document.getElementById('search')?.value||'').toLowerCase();
+const f=document.getElementById('filter')?.value||'';
+const list=db.events.filter(e=>(!f||e.childId===f)&&(!q||JSON.stringify(e).toLowerCase().includes(q))).sort((a,b)=>new Date(b.date)-new Date(a.date));
+document.getElementById('historyList').innerHTML=list.map(eventMini).join('')||'<div class="card"><p class="muted">Nessun episodio trovato.</p></div>'
+}
+
+function newReminder(editId=''){
+const r=db.reminders.find(x=>x.id===editId)||{};
+const title=prompt('Titolo promemoria / visita',r.title||'');if(!title)return;
+const date=prompt('Data e ora (YYYY-MM-DD HH:MM)',r.date||'')||'';
+const dose=prompt('Dose (se applicabile)',r.dose||'')||'';
+const notes=prompt('Note',r.notes||'')||'';
+if(editId){Object.assign(r,{title,date,dose,notes})}else db.reminders.push({id:crypto.randomUUID(),childId:db.children[0]?.id||'',type:'medicine',title,date,dose,notes,done:false});
+save();show('agenda')
+}
+function deleteReminder(id){if(confirm('Eliminare?')){db.reminders=db.reminders.filter(r=>r.id!==id);save();show('agenda')}}
+function toggleReminder(id){const r=db.reminders.find(x=>x.id===id);if(r)r.done=!r.done;save();show('agenda')}
+function agendaPage(a){
+a.innerHTML=`<div class="top-actions"><h2>⏰ Agenda</h2><button onclick="newReminder()">+ Promemoria</button></div>
+${db.reminders.map(r=>`<div class="card"><h3>${esc(r.title)}</h3><div class="muted">${esc(r.date||'')} · ${r.done?'Completato':'Da fare'}</div>${r.dose?`<div>Dose: ${esc(r.dose)}</div>`:''}${r.notes?`<div>Note: ${esc(r.notes)}</div>`:''}<div class="actions"><button onclick="toggleReminder('${r.id}')">${r.done?'↩️ Riapri':'✅ Completa'}</button><button class="secondary" onclick="newReminder('${r.id}')">✏️ Modifica</button><button class="danger" onclick="deleteReminder('${r.id}')">🗑️ Elimina</button></div></div>`).join('')||'<div class="card"><p class="muted">Nessun promemoria.</p></div>'}`
 }
 
 function calendarPage(a){
- const now=new Date(), y=now.getFullYear(), m=now.getMonth(), first=new Date(y,m,1), days=new Date(y,m+1,0).getDate(), offset=(first.getDay()+6)%7;
- let cells=['Lun','Mar','Mer','Gio','Ven','Sab','Dom'].map(x=>`<div style="text-align:center;font-size:11px;color:#68707d;padding:4px">${x}</div>`).join('');
- for(let i=0;i<offset;i++) cells+='<div></div>';
- for(let d=1;d<=days;d++){const key=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,has=db.events.some(e=>new Date(e.date).toISOString().slice(0,10)===key),today=d===now.getDate();cells+=`<div onclick="dayDetails('${key}')" style="min-height:42px;border:1px solid ${has?'#f0c8bb':'#e9eeec'};border-radius:9px;background:${has?'#fff5f1':'#fff'};padding:6px;font-size:12px;position:relative;${today?'outline:2px solid #78968f':''}">${d}${has?'<span style="width:6px;height:6px;background:#d9775b;border-radius:50%;position:absolute;bottom:5px;right:6px;display:block"></span>':''}</div>`}
- a.innerHTML=`<div class="top-actions"><h2>📅 Calendario</h2><span class="pill">${now.toLocaleDateString('it-IT',{month:'long',year:'numeric'})}</span></div><div class="card"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px">${cells}</div></div><div id="dayDetails"></div>`;
+const now=new Date(),y=now.getFullYear(),m=now.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0);
+let cells='';for(let i=0;i<first.getDay();i++)cells+='<div></div>';
+for(let d=1;d<=last.getDate();d++){const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const has=db.events.some(e=>(e.date||'').startsWith(ds));cells+=`<div class="day ${has?'has':''}" onclick="dayEvents('${ds}')"><b>${d}</b>${has?'<br><span class="pill">eventi</span>':''}</div>`}
+a.innerHTML=`<div class="card"><h2>📅 Calendario</h2><p class="muted">${now.toLocaleDateString('it-IT',{month:'long',year:'numeric'})}</p><div class="calgrid">${['Dom','Lun','Mar','Mer','Gio','Ven','Sab'].map(x=>`<div class="weekday">${x}</div>`).join('')}${cells}</div></div><div id="dayBox"></div>`
 }
-function dayDetails(key){
- const es=db.events.filter(e=>new Date(e.date).toISOString().slice(0,10)===key);
- document.getElementById('dayDetails').innerHTML=`<div class="card"><b>${new Date(key+'T12:00').toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'})}</b>${es.length?es.map(eventMini).join(''):'<p class="muted">Nessun evento registrato in questa giornata.</p>'}</div>`;
+function dayEvents(ds){
+const es=db.events.filter(e=>(e.date||'').startsWith(ds));
+document.getElementById('dayBox').innerHTML=`<div class="card"><h2>📅 ${new Date(ds+'T12:00').toLocaleDateString('it-IT',{dateStyle:'full'})}</h2>${es.length?es.map(eventMini).join(''):'<p class="muted">Nessun evento registrato in questa giornata.</p>'}</div>`
 }
-
 
 function reportPage(){
- const a=document.getElementById('app');
- const today=new Date(), start=new Date(today); start.setDate(start.getDate()-30);
- a.innerHTML=`<div class="card"><h2>🩺 Report per la pediatra</h2>
- <div class="muted">Crea un riepilogo ordinato usando esclusivamente i dati registrati in Bimbù.</div>
- <label>Bambino</label><select id="repChild">${childOptions()}</select>
- <div class="grid"><div><label>Dal</label><input id="repFrom" type="date" value="${start.toISOString().slice(0,10)}"></div>
- <div><label>Al</label><input id="repTo" type="date" value="${today.toISOString().slice(0,10)}"></div></div>
- <div class="row" style="margin-top:14px"><button onclick="generateReport()">📄 Genera report</button><button class="secondary" onclick="show('history')">Annulla</button></div></div>
- <div class="card"><b>Il report può contenere</b><div class="muted" style="margin-top:7px">episodi registrati, temperature, sintomi, farmaci/dosi inseriti, note e promemoria/visite nel periodo scelto.</div></div>`;
+const a=document.getElementById('app'),today=new Date(),start=new Date(today);start.setDate(start.getDate()-30);
+a.innerHTML=`<div class="card"><h2>🩺 Report per la pediatra</h2>
+<div class="muted">Crea un riepilogo ordinato usando esclusivamente i dati registrati in Bimbù.</div>
+<label>Bambino</label><select id="repChild">${childOptions()}</select>
+<div class="grid"><div><label>Dal</label><input id="repFrom" type="date" value="${start.toISOString().slice(0,10)}"></div><div><label>Al</label><input id="repTo" type="date" value="${today.toISOString().slice(0,10)}"></div></div>
+<div class="row" style="margin-top:14px"><button onclick="generateReport()">📄 Genera report</button><button class="secondary" onclick="show('history')">Annulla</button></div></div>
+<div class="card"><b>Il report può contenere</b><div class="muted" style="margin-top:7px">episodi registrati, temperature, sintomi, farmaci/dosi inseriti, note e promemoria/visite nel periodo scelto.</div></div>
+<div class="card"><small class="muted">Il report è basato esclusivamente sulle informazioni inserite nel diario e non costituisce una diagnosi o valutazione medica.</small></div>`
 }
 
 function generateReport(){
- const childId=document.getElementById('repChild').value;
- const from=document.getElementById('repFrom').value;
- const to=document.getElementById('repTo').value;
- if(!childId)return alert('Seleziona il bambino.');
- if(!from||!to||from>to)return alert('Controlla il periodo selezionato.');
- const child=db.children.find(c=>c.id===childId);
- const end=new Date(to+'T23:59:59');
- const start=new Date(from+'T00:00:00');
- const events=db.events.filter(e=>e.childId===childId && new Date(e.date)>=start && new Date(e.date)<=end).sort((a,b)=>new Date(a.date)-new Date(b.date));
- const reminders=db.reminders.filter(r=>r.childId===childId && new Date(r.when)>=start && new Date(r.when)<=end).sort((a,b)=>new Date(a.when)-new Date(b.when));
- const eventRows=events.length?events.map(e=>`<tr><td>${new Date(e.date).toLocaleString('it-IT')}</td><td>${esc(e.title)}</td><td>${esc(e.symptoms||'')}</td><td>${esc(e.temperature||'')}</td><td>${esc(e.medicine||'')} ${esc(e.dose||'')}</td><td>${esc(e.notes||'')}</td></tr>`).join(''):`<tr><td colspan="6">Nessun evento registrato nel periodo.</td></tr>`;
- const reminderRows=reminders.length?reminders.map(r=>`<tr><td>${new Date(r.when).toLocaleString('it-IT')}</td><td>${r.type==='farmaco'?'Farmaco':'Visita'}</td><td>${esc(r.title)}</td><td>${esc(r.dose||'')}</td><td>${r.done?'Completato':'Da fare'}</td><td>${esc(r.note||'')}</td></tr>`).join(''):`<tr><td colspan="6">Nessun promemoria o visita registrata nel periodo.</td></tr>`;
- const report=`<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Report Bimbù - ${esc(child.name)}</title><style>
- body{font-family:Arial,sans-serif;color:#26322f;margin:0;padding:30px;background:#f7f8f4}main{max-width:1000px;margin:auto;background:#fff;padding:32px;border-radius:16px}h1{color:#5c7a65;margin-bottom:4px}h2{margin-top:28px;color:#496a63}p{color:#69736e}table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}th,td{border:1px solid #dfe5df;padding:8px;text-align:left;vertical-align:top}th{background:#eaf2e7}.actions{margin-bottom:20px}@media print{body{background:#fff;padding:0}main{box-shadow:none;border-radius:0}.actions{display:none}}
- </style></head><body><main><div class="actions"><button onclick="window.print()">🖨️ Stampa / Salva come PDF</button></div>
- <h1>🌱 Bimbù</h1><p><b>Report per la pediatra</b></p>
- <p><b>Bambino:</b> ${esc(child.name)}<br><b>Data di nascita:</b> ${esc(child.birthDate||'—')}<br><b>Periodo:</b> ${new Date(from+'T12:00').toLocaleDateString('it-IT')} – ${new Date(to+'T12:00').toLocaleDateString('it-IT')}</p>
- <h2>🤒 Eventi sanitari</h2><table><thead><tr><th>Data</th><th>Evento</th><th>Sintomi</th><th>Temperatura</th><th>Farmaco / dose</th><th>Note</th></tr></thead><tbody>${eventRows}</tbody></table>
- <h2>⏰ Promemoria e visite</h2><table><thead><tr><th>Data</th><th>Tipo</th><th>Titolo</th><th>Dose</th><th>Stato</th><th>Note</th></tr></thead><tbody>${reminderRows}</tbody></table>
- <p style="margin-top:28px;font-size:11px">Report generato sulla base delle informazioni inserite nel diario Bimbù. Non costituisce una valutazione o una diagnosi medica.</p>
- </main></body></html>`;
- const w=window.open('','_blank');
- if(!w)return alert('Il browser ha bloccato la nuova finestra. Consenti i popup per Bimbù.');
- w.document.write(report);w.document.close();
+const childId=document.getElementById('repChild').value,from=document.getElementById('repFrom').value,to=document.getElementById('repTo').value;
+if(!childId)return alert('Seleziona il bambino.');
+if(!from||!to||from>to)return alert('Controlla il periodo.');
+const child=db.children.find(c=>c.id===childId);
+const events=db.events.filter(e=>e.childId===childId&&e.date&&e.date.slice(0,10)>=from&&e.date.slice(0,10)<=to).sort((a,b)=>new Date(a.date)-new Date(b.date));
+const rems=db.reminders.filter(r=>r.childId===childId&&r.date&&r.date.slice(0,10)>=from&&r.date.slice(0,10)<=to);
+const eventRows=events.length?events.map(e=>`<tr><td>${fmt(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.symptoms||'—')}</td><td>${esc(e.temperature||'—')}</td><td>${esc(e.medicine||'—')} ${e.dose?`(${esc(e.dose)})`:''}</td><td>${esc(e.notes||'—')}</td></tr>`).join(''):'<tr><td colspan="6">Nessun episodio registrato nel periodo.</td></tr>';
+const reminderRows=rems.length?rems.map(r=>`<tr><td>${esc(r.date||'')}</td><td>${esc(r.title)}</td><td>${esc(r.dose||'—')}</td><td>${r.done?'Completato':'Da fare'}</td><td>${esc(r.notes||'—')}</td></tr>`).join(''):'<tr><td colspan="5">Nessun promemoria o visita registrata nel periodo.</td></tr>';
+const report=`<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Report Bimbù - ${esc(child.name)}</title><style>body{font-family:Arial,sans-serif;color:#26322f;margin:0;padding:30px;background:#f7f8f4}main{max-width:1000px;margin:auto;background:#fff;padding:32px;border-radius:16px}h1{color:#5c7a65;margin-bottom:5px}.actions{margin-bottom:20px}button{padding:12px 18px;border:0;border-radius:10px;background:#5c7a65;color:#fff;font-weight:bold}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left;vertical-align:top;font-size:12px}@media print{.actions{display:none}body{background:#fff}main{box-shadow:none}}.note{margin-top:28px;font-size:11px;color:#667}</style></head><body><main><div class="actions"><button onclick="window.print()">🖨️ Stampa / Salva come PDF</button></div><h1>🌱 Bimbù</h1><p><b>Report per la pediatra</b></p><p><b>Bambino:</b> ${esc(child.name)}<br><b>Data di nascita:</b> ${esc(child.birthDate||'—')}<br><b>Periodo:</b> ${new Date(from+'T12:00').toLocaleDateString('it-IT')} – ${new Date(to+'T12:00').toLocaleDateString('it-IT')}</p><h2>Episodi sanitari</h2><table><thead><tr><th>Data</th><th>Titolo</th><th>Sintomi</th><th>Temperatura</th><th>Farmaco / dose</th><th>Note</th></tr></thead><tbody>${eventRows}</tbody></table><h2>Promemoria / visite</h2><table><thead><tr><th>Data</th><th>Titolo</th><th>Dose</th><th>Stato</th><th>Note</th></tr></thead><tbody>${reminderRows}</tbody></table><p class="note">Report generato sulla base delle informazioni inserite nel diario Bimbù. Non costituisce una valutazione o una diagnosi medica.</p></main></body></html>`;
+const w=window.open('','_blank');if(!w)return alert('Il browser ha bloccato la nuova finestra. Consenti i popup per Bimbù.');w.document.write(report);w.document.close()
 }
 
-function historyPage(a){a.innerHTML=`<div class="top-actions"><h2>📋 Storico completo</h2><button onclick="newEvent()">+ Evento</button></div><div class="card"><label>Cerca</label><input id="search" placeholder="sintomo, farmaco, note..." oninput="renderHistory()"><label>Filtra bambino</label><select id="filter" onchange="renderHistory()">${childOptions()}</select></div><div id="hist"></div>`;renderHistory()}
-function renderHistory(){const q=(document.getElementById('search')?.value||'').toLowerCase(),f=document.getElementById('filter')?.value||'';let es=db.events.filter(e=>(!f||e.childId===f)&&JSON.stringify(e).toLowerCase().includes(q)).sort((a,b)=>new Date(b.date)-new Date(a.date));document.getElementById('hist').innerHTML=es.length?es.map(eventMini).join(''):'<div class="empty">Nessun evento trovato.</div>'}
-function reminderForm(r={}){document.getElementById('app').innerHTML=`<div class="card"><h2>${r.id?'✏️ Modifica promemoria':'➕ Nuovo promemoria'}</h2><label>Bambino</label><select id="rchild">${childOptions(r.childId||'')}</select><label>Tipo</label><select id="rtype"><option value="farmaco" ${r.type==='farmaco'?'selected':''}>💊 Farmaco registrato</option><option value="visita" ${r.type==='visita'?'selected':''}>🩺 Visita</option></select><label>Titolo</label><input id="rtitle" value="${esc(r.title||'')}"><label>Data e ora</label><input id="rwhen" type="datetime-local" value="${r.when?new Date(r.when).toISOString().slice(0,16):new Date().toISOString().slice(0,16)}"><label>Dose (se già prescritta)</label><input id="rdose" value="${esc(r.dose||'')}"><label>Note</label><textarea id="rnote">${esc(r.note||'')}</textarea><div class="row" style="margin-top:12px"><button onclick="saveReminderForm('${r.id||''}')">Salva</button><button class="secondary" onclick="show('agenda')">Annulla</button></div></div>`}
-function newReminder(){if(!db.children.length)return alert('Prima crea almeno un profilo bambino.');reminderForm()}
-function saveReminderForm(id){if(!rchild.value)return alert('Seleziona il bambino.');const data={childId:rchild.value,type:rtype.value,title:rtitle.value.trim()||'Promemoria',when:new Date(rwhen.value).toISOString(),dose:rdose.value.trim(),note:rnote.value.trim(),done:false};if(id){const old=db.reminders.find(r=>r.id===id);Object.assign(old,data,{done:old.done,completedAt:old.completedAt})}else db.reminders.push({id:uid(),...data});save();show('agenda')}
-function editReminder(id){reminderForm(db.reminders.find(r=>r.id===id)||{})} function deleteReminder(id){if(!confirm('Eliminare questo promemoria?'))return;db.reminders=db.reminders.filter(r=>r.id!==id);save();show('agenda')} function completeReminder(id){const r=db.reminders.find(x=>x.id===id);r.done=!r.done;r.completedAt=r.done?new Date().toISOString():null;save();show('agenda')}
-function reminderMini(r){const c=db.children.find(x=>x.id===r.childId);return `<div class="card"><div class="item-title">${r.type==='farmaco'?'💊':'🩺'} ${esc(r.title)}</div><div class="muted">${esc(c?.name||'')} · ${fmt(r.when)}</div>${r.dose?`<div><b>Dose:</b> ${esc(r.dose)}</div>`:''}${r.note?`<div><b>Note:</b> ${esc(r.note)}</div>`:''}<div class="row" style="margin-top:10px"><button onclick="completeReminder('${r.id}')">${r.done?'↩️ Da fare':'✅ Fatto'}</button><button class="secondary" onclick="editReminder('${r.id}')">✏️ Modifica</button><button class="danger" onclick="deleteReminder('${r.id}')">🗑️ Elimina</button></div></div>`}
-function agendaPage(a){let rs=[...db.reminders].sort((a,b)=>new Date(a.when)-new Date(b.when));a.innerHTML=`<div class="top-actions"><h2>⏰ Agenda</h2><button onclick="newReminder()">+ Promemoria</button></div>${rs.length?rs.map(reminderMini).join(''):'<div class="empty">Nessun promemoria o visita.</div>'}`}
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{}); show('home');
-</script></body></html>
+show('home');
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
